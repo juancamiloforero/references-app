@@ -9,35 +9,34 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ReferencesService {
+
+  referencia: ReferenceModel[] = undefined;
   
   constructor(private afs: AngularFirestore, private authSvc: AuthService) { }
 
-  async getReferences() {
-    return await this.authSvc.user$.pipe(
-      take(1),
-      map(usr => {
-        return this.afs.collection('references', ref => ref.where('userId', '==', usr.uid)).snapshotChanges()
-      })
-    )
-  }
-
-  async getReference(id: string) {
+  getReferences() {
     return this.authSvc.user$.pipe(
       take(1),
       map(usr => {
-        return this.afs.collection('references', ref => ref.where('userId', '==', usr.uid)).doc(id).snapshotChanges()
-      })
-    )
+        const collection = this.afs.collection<ReferenceModel>('references', ref => ref.where('userId', '==', usr.uid));
+        return collection.valueChanges({idField: 'id'});
+      }))
   }
 
-  async addReference(ref: ReferenceModel) {
-    this.afs.collection('references').add(ref).catch(e => {
-      console.log(e);
-    })
+  getReference(id: string) {
+    return this.authSvc.user$.pipe(
+      take(1),
+      map(usr => {
+        const document = this.afs.collection<ReferenceModel>('references', ref => ref.where('userId', '==', usr.uid)).doc<ReferenceModel>(id);
+        return document.valueChanges({idField: 'id'});
+      }))
+  }
+
+  addReference(ref: ReferenceModel) {
+    return this.afs.collection('references').add(ref);
   }
   
   updateReference(ref: ReferenceModel): Promise<void> {
-    console.log("Referencia modificar->", ref);
     return this.afs.collection('references').doc(ref.id).update({
       titulo: ref.titulo,
       autores: ref.autores,

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReferencesService } from '../service/references.service';
 import { ReferenceModel } from '../shared/reference.interface';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { AuthService } from '../service/auth.service';
 
 @Component({
   selector: 'app-create-reference',
@@ -10,14 +12,51 @@ import { ReferenceModel } from '../shared/reference.interface';
 })
 export class CreateReferencePage implements OnInit {
 
-  constructor(private refSvc: ReferencesService, private router: Router) { }
+  constructor(
+    private refSvc: ReferencesService, 
+    private router: Router, 
+    private formBuilder: FormBuilder, 
+    private authSvc: AuthService) { }
+
+  refForm: FormGroup
+  isSubmitted = false;
 
   ngOnInit() {
+    this.refForm = this.formBuilder.group({
+      titulo: ['', [Validators.required]],
+      autores: ['', [Validators.required]],
+      tipoPub: [null, [Validators.required]],
+      anioPub: [null, [Validators.required]],
+      doi: [''],
+      evento: ['']
+    })
   }
 
-  async onCreateReference(data: ReferenceModel) {
-    await this.refSvc.addReference(data).then(() => {
-      this.router.navigate(['home']);
-    });
+  onCreateReference() {
+    this.isSubmitted = true;
+
+    if (!this.refForm.valid) {
+
+    } else {
+      this.authSvc.user$.subscribe(usr => {
+        let data: ReferenceModel = {
+          autores: this.refForm.get('autores').value,
+          tipoPub: +this.refForm.get('tipoPub').value,
+          titulo: this.refForm.get('titulo').value,
+          doi: this.refForm.get('doi').value,
+          evento: this.refForm.get('evento').value,
+          anioPub: +this.refForm.get('anioPub').value,
+          userId: usr.uid,
+        }
+        this.refSvc.addReference(data).then(() => {
+          this.refForm.reset();
+          this.router.navigate(['home']);
+        })
+      });
+    }
+  }
+
+  get errorControl() {
+    return this.refForm.controls;
   }
 }

@@ -19,7 +19,6 @@ export class LoginPage implements OnInit {
       const user = await this.authSvc.login(email.value, password.value);
 
       if (user) {
-        console.log('User->', user);
         this.router.navigate(['home']);
       }
     } catch (error) {

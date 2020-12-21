@@ -31,11 +31,13 @@ const routes: Routes = [
   },
   {
     path: 'create-reference',
-    loadChildren: () => import('./create-reference/create-reference.module').then( m => m.CreateReferencePageModule)
+    loadChildren: () => import('./create-reference/create-reference.module').then( m => m.CreateReferencePageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'modify-reference',
-    loadChildren: () => import('./modify-reference/modify-reference.module').then( m => m.ModifyReferencePageModule)
+    loadChildren: () => import('./modify-reference/modify-reference.module').then( m => m.ModifyReferencePageModule),
+    canActivate: [AuthGuard]
   },
 ];
 

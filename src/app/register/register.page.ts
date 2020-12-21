@@ -19,9 +19,7 @@ export class RegisterPage implements OnInit {
       const user = await this.authSvc.register(email.value, password.value);
 
       if (user) {
-        console.log('User->', user);
         this.router.navigate(['home']);
-        //  CheckEmail
       }
     } catch(error){
       console.log('Error->', error);

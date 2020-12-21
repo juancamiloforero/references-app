@@ -16,10 +16,6 @@ export class HomePage implements OnInit{
 
   constructor(private authSvc: AuthService, private refSvc: ReferencesService,private router: Router, public alertController: AlertController) {}
 
-  ionViewWillEnter() {
-    
-  }
-
   async onDeleteReference(id) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
@@ -46,25 +42,14 @@ export class HomePage implements OnInit{
   }
 
   private loadReferences() {
-    this.refSvc.getReferences().then(value => {
-      this.references = [];
-      value.subscribe((value) => {
-        value.subscribe((value) => { 
-          value.map(a => {
-            this.references.push({
-              id: a.payload.doc.id,
-              titulo: a.payload.doc.get('titulo'),
-              autores: a.payload.doc.get('autores'),
-              tipoPub: a.payload.doc.get('tipoPub'),
-              evento: a.payload.doc.get('evento'),
-              doi: a.payload.doc.get('doi'),
-              anioPub: a.payload.doc.get('anioPub'),
-              userId: a.payload.doc.get('userId')
-            })
-          })
-        })
-      })
-    });
+    this.refSvc.getReferences().subscribe(refs => {
+      refs.subscribe(refs => {
+        this.references = refs;
+      }); 
+    },
+    err => {
+      console.log('Ha ocurrido un error al cargar las referencias: ', err);
+    })
   }
 
   async onLogout() {

@@ -4,7 +4,8 @@ import { AngularFireAuth } from "@angular/fire/auth";
 
 import { AngularFirestore, AngularFirestoreDocument } from "@angular/fire/firestore";
 import { Observable, of } from 'rxjs';
-import { switchMap } from "rxjs/operators";
+import firebase from 'firebase/app';
+import { switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class AuthService {
   }
   async login(email: string, password: string): Promise<User> {
     try{
-      const { user }= await this.afAuth.signInWithEmailAndPassword(email, password);
+      const { user } = await this.afAuth.signInWithEmailAndPassword(email, password);
       this.updateUserData(user);
       return user;
     } catch(error){
