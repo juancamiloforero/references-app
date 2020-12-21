@@ -1,20 +1,57 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Mis Referencias
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="onLogout()">
+        Cerrar Sesión
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-card *ngFor="let ref of references">
+    <ion-item>
+      <ion-col size="8">
+        <ion-label>
+          <h2>{{ref.titulo}}</h2>
+        </ion-label>
+      </ion-col>
+      <ion-col size="4">
+        <ion-button size="small" color="primary" (click)="onUpdateReference(ref.id)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button size="small" color="danger" (click)="onDeleteReference(ref.id)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-col>
+    </ion-item>
+    <ion-card-content>
+      <ion-row><ion-label>Autores: {{ref.autores}}</ion-label></ion-row>
+      <ion-row><ion-label>Año {{ref.anioPub}}</ion-label></ion-row>
+      <ion-row>
+        <ion-label *ngIf="ref.tipoPub === 1">Tipo de publicación: Artículo de revista</ion-label>
+        <ion-label *ngIf="ref.tipoPub === 2">Tipo de publicación: Artículo en evento</ion-label>
+        <ion-label *ngIf="ref.tipoPub === 3">Tipo de publicación: Otro</ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-label *ngIf="ref.doi === ''">DOI: No hay DOI registrado</ion-label>
+        <ion-label *ngIf="ref.doi != ''">DOI: {{ref.doi}}</ion-label>
+      </ion-row>
+      <ion-row>
+        <ion-label *ngIf="ref.evento === ''">Evento o revista: No hay evento o revista registrado</ion-label>
+        <ion-label *ngIf="ref.evento != ''">Evento o revista: {{ref.evento}}</ion-label>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+  
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="onCreateReference()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

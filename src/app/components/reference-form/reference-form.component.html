@@ -1,0 +1,57 @@
+<form [formGroup]="refForm" (ngSubmit)="onActionButton()" novalidate>
+  <ion-item lines="full">
+    <ion-label position="floating">Título</ion-label>
+    <ion-input formControlName="titulo" type="text" value="{{myReference.titulo}}" ngDefaultControl></ion-input>
+  </ion-item>
+  <span class="error ion-padding" *ngIf="isSubmitted && errorControl.titulo.errors?.required">
+    El título es requerido.
+  </span>
+
+  <ion-item lines="full">
+    <ion-label position="floating">Autores</ion-label>
+    <ion-input formControlName="autores" type="text" value="{{myReference.autores}}" ngDefaultControl></ion-input>
+  </ion-item>
+  <span class="error ion-padding" *ngIf="isSubmitted && errorControl.autores.errors?.required">
+    El o los autores son requeridos.
+  </span>
+
+  <ion-item lines="full">
+    <ion-label position="floating">Tipo de publicación</ion-label>
+      <ion-select formControlName="tipoPub" ngDefaultControl>
+        <ion-select-option value=1>Artículo de revista</ion-select-option>
+        <ion-select-option value=2>Artículo en evento</ion-select-option>
+        <ion-select-option value=3>Otro</ion-select-option>
+      </ion-select>
+  </ion-item>
+  <span class="error ion-padding" *ngIf="isSubmitted && errorControl.tipoPub.errors?.required">
+    El tipo de publicación es requerido.
+  </span>
+
+  <ion-item>
+    <ion-label position="floating">Año de publicación</ion-label>
+    <ion-input type="number" formControlName="anioPub" ngDefaultControl></ion-input>
+  </ion-item>
+  <span class="error ion-padding" *ngIf="isSubmitted && errorControl.anioPub.errors?.required">
+    El año de publicación es requerido.
+  </span>
+
+  <ion-item lines="full">
+    <ion-label position="floating">Evento o Revista</ion-label>
+    <ion-input type="text" formControlName="evento" ngDefaultControl></ion-input>
+  </ion-item>
+
+  <ion-item lines="full">
+    <ion-label position="floating">DOI</ion-label>
+    <ion-input type="text" formControlName="doi" ngDefaultControl></ion-input>
+  </ion-item>
+
+  <ion-row>
+    <ion-col>
+      <ion-button
+      type="submit"
+      expand="block"
+      >Guardar
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</form>

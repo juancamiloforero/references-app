@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "referenciasappionic": {
+      "hosting": {
+        "app": [
+          "referenciasappionic"
+        ]
+      }
+    }
+  }
+}

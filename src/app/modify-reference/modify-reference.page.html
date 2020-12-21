@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editando referencia</ion-title>
+  </ion-toolbar>
+  
+</ion-header>
+
+<ion-content>
+  <app-reference-form [reference]=reference (onReferenceAction)="onModifyReference($event)"></app-reference-form>
+</ion-content>
