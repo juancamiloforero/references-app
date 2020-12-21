@@ -4,6 +4,7 @@ import { ReferencesService } from '../service/references.service';
 import { ReferenceModel } from '../shared/reference.interface';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-modify-reference',
@@ -21,7 +22,8 @@ export class ModifyReferencePage implements OnInit {
     private refSvc: ReferencesService, 
     private router: Router, 
     private route: ActivatedRoute, 
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private toastController: ToastController
     ) { }
 
   ngOnInit() {
@@ -61,6 +63,7 @@ export class ModifyReferencePage implements OnInit {
       }
       this.refSvc.updateReference(data).then(() => {
         this.refForm.reset();
+        this.presentToast("Referencia modificada satisfactoriamente");
         this.router.navigate(['home']);
       })
     }
@@ -69,5 +72,14 @@ export class ModifyReferencePage implements OnInit {
   get errorControl() {
     return this.refForm.controls;
   }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2500
+    });
+    toast.present();
+  }
+
 
 }

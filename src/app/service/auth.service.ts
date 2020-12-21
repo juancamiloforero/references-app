@@ -33,22 +33,13 @@ export class AuthService {
     }
   }
   async login(email: string, password: string): Promise<User> {
-    try{
-      const { user } = await this.afAuth.signInWithEmailAndPassword(email, password);
-      this.updateUserData(user);
-      return user;
-    } catch(error){
-      console.log('Error->', error);
-    }
-
+    const { user } = await this.afAuth.signInWithEmailAndPassword(email, password);
+    this.updateUserData(user);
+    return user;
   }
   async register(email: string, password: string): Promise<User> {
-    try {
-      const { user } = await this.afAuth.createUserWithEmailAndPassword(email, password);
-      return user;
-    } catch (error) {
-      console.log('Error->', error);
-    }
+    const { user } = await this.afAuth.createUserWithEmailAndPassword(email, password);
+    return user;
   }
 
   private updateUserData(user: User) {

@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { AuthService } from '../service/auth.service';
 import { ReferencesService } from '../service/references.service';
+import { ToastController } from '@ionic/angular';
 import { ReferenceModel } from '../shared/reference.interface';
 
 @Component({
@@ -14,7 +15,11 @@ export class HomePage implements OnInit{
 
   private references: ReferenceModel[];
 
-  constructor(private authSvc: AuthService, private refSvc: ReferencesService,private router: Router, public alertController: AlertController) {}
+  constructor(private authSvc: AuthService, 
+    private refSvc: ReferencesService,
+    private router: Router, 
+    public alertController: AlertController, 
+    private toastController: ToastController) {}
 
   async onDeleteReference(id) {
     const alert = await this.alertController.create({
@@ -29,7 +34,9 @@ export class HomePage implements OnInit{
         }, {
           text: 'Okay',
           handler: () => {
-            this.refSvc.deleteReference(id);
+            this.refSvc.deleteReference(id).then(() => {
+              this.presentToast("Se ha eliminado la referencia")
+            });
           }
         }
       ]
@@ -54,6 +61,7 @@ export class HomePage implements OnInit{
 
   async onLogout() {
     this.authSvc.logout().then(() => {
+      this.references = null;
       this.router.navigate(['start']);
     });
   }
@@ -64,6 +72,14 @@ export class HomePage implements OnInit{
 
   onUpdateReference(id) {
     this.router.navigate(['modify-reference', { refId: id }]);
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2500
+    });
+    toast.present();
   }
 
 }

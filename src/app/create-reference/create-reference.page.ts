@@ -4,6 +4,7 @@ import { ReferencesService } from '../service/references.service';
 import { ReferenceModel } from '../shared/reference.interface';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-create-reference',
@@ -16,7 +17,8 @@ export class CreateReferencePage implements OnInit {
     private refSvc: ReferencesService, 
     private router: Router, 
     private formBuilder: FormBuilder, 
-    private authSvc: AuthService) { }
+    private authSvc: AuthService,
+    private toastController: ToastController) { }
 
   refForm: FormGroup
   isSubmitted = false;
@@ -50,6 +52,7 @@ export class CreateReferencePage implements OnInit {
         }
         this.refSvc.addReference(data).then(() => {
           this.refForm.reset();
+          this.presentToast("Referencia creada satisfactoriamente");
           this.router.navigate(['home']);
         })
       });
@@ -58,5 +61,13 @@ export class CreateReferencePage implements OnInit {
 
   get errorControl() {
     return this.refForm.controls;
+  }
+
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2500
+    });
+    toast.present();
   }
 }
